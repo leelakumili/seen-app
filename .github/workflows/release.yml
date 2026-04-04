@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-     - name: Set version
+      - name: Set version
         run: npm version ${{ inputs.version }} --no-git-tag-version  
 
       - name: Build and package
