@@ -1,0 +1,149 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{display:flex;flex-direction:column;gap:28px}
+.tlabel{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px}
+.app{display:flex;height:460px;border-radius:var(--border-radius-lg);overflow:hidden;font-family:var(--font-sans)}
+
+/* THEME 1: Warm Ivory + Deep Navy + Amber */
+.t1{border:0.5px solid #d8d0c0;background:#f5f0e6}
+.t1-sb{width:188px;background:#1a2d5a;padding:14px 0;display:flex;flex-direction:column;border-right:none;flex-shrink:0}
+.t1-logo{padding:0 14px 16px;border-bottom:0.5px solid rgba(201,146,74,0.25);margin-bottom:10px}
+.t1-lm{font-size:14px;font-weight:500;color:#f5f0e6;letter-spacing:-0.3px}
+.t1-ls{font-size:10px;color:rgba(201,146,74,0.65);margin-top:2px}
+.t1-nav{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:12px;color:rgba(245,240,230,0.45);cursor:pointer;margin:1px 7px;border-radius:5px}
+.t1-nav:hover{background:rgba(201,146,74,0.1);color:rgba(245,240,230,0.8)}
+.t1-nav.on{background:rgba(201,146,74,0.18);color:#c9924a}
+.t1-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.t1-foot{margin-top:auto;padding:10px 14px;border-top:0.5px solid rgba(201,146,74,0.18)}
+.t1-av{width:26px;height:26px;border-radius:50%;background:rgba(201,146,74,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#c9924a;flex-shrink:0}
+.t1-un{font-size:11px;color:rgba(245,240,230,0.6)}
+.t1-ur{font-size:10px;color:rgba(245,240,230,0.3)}
+.t1-main{flex:1;background:#f5f0e6;padding:22px;overflow:hidden;position:relative}
+.t1-h1{font-size:16px;font-weight:500;color:#1a2d5a;margin-bottom:2px}
+.t1-h2{font-size:11px;color:#8a7e6a;margin-bottom:18px}
+.t1-mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.t1-mc{background:#fff;border:0.5px solid #ddd5c3;border-radius:8px;padding:12px}
+.t1-ml{font-size:10px;color:#8a7e6a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.t1-mv{font-size:22px;font-weight:500;color:#1a2d5a}
+.t1-mh{font-size:10px;color:#b0a490;margin-top:2px}
+.t1-mv.acc{color:#c9924a}
+.t1-sl{font-size:10px;color:#8a7e6a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.t1-entries{display:flex;flex-direction:column;gap:7px}
+.t1-e{background:#fff;border:0.5px solid #ddd5c3;border-radius:7px;padding:10px 12px;display:flex;gap:10px}
+.t1-ed{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.t1-et{font-size:12px;color:#3a3228;line-height:1.5;flex:1}
+.t1-em{display:flex;gap:6px;margin-top:5px}
+.t1-eb{font-size:10px;color:#1a2d5a;background:rgba(26,45,90,0.07);padding:2px 7px;border-radius:3px}
+.t1-ed2{font-size:10px;color:#b0a490}
+.t1-fab{position:absolute;bottom:16px;right:16px;background:#1a2d5a;color:#f5f0e6;border:none;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:500;cursor:pointer}
+
+/* THEME 2: Soft Sage + Warm White + Forest */
+.t2{border:0.5px solid #c8d5c8;background:#f4f7f4}
+.t2-sb{width:188px;background:#2d5a3d;padding:14px 0;display:flex;flex-direction:column;flex-shrink:0}
+.t2-logo{padding:0 14px 16px;border-bottom:0.5px solid rgba(255,255,255,0.1);margin-bottom:10px}
+.t2-lm{font-size:14px;font-weight:500;color:#f4f7f4;letter-spacing:-0.3px}
+.t2-ls{font-size:10px;color:rgba(196,224,196,0.6);margin-top:2px}
+.t2-nav{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:12px;color:rgba(244,247,244,0.4);cursor:pointer;margin:1px 7px;border-radius:5px}
+.t2-nav:hover{background:rgba(255,255,255,0.08);color:rgba(244,247,244,0.8)}
+.t2-nav.on{background:rgba(255,255,255,0.15);color:#c4e0a0}
+.t2-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.t2-foot{margin-top:auto;padding:10px 14px;border-top:0.5px solid rgba(255,255,255,0.1)}
+.t2-av{width:26px;height:26px;border-radius:50%;background:rgba(196,224,160,0.25);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#c4e0a0;flex-shrink:0}
+.t2-un{font-size:11px;color:rgba(244,247,244,0.6)}
+.t2-ur{font-size:10px;color:rgba(244,247,244,0.3)}
+.t2-main{flex:1;background:#f4f7f4;padding:22px;overflow:hidden;position:relative}
+.t2-h1{font-size:16px;font-weight:500;color:#1e3d2f;margin-bottom:2px}
+.t2-h2{font-size:11px;color:#7a9a82;margin-bottom:18px}
+.t2-mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.t2-mc{background:#fff;border:0.5px solid #c8d5c8;border-radius:8px;padding:12px}
+.t2-ml{font-size:10px;color:#7a9a82;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.t2-mv{font-size:22px;font-weight:500;color:#2d5a3d}
+.t2-mh{font-size:10px;color:#a0b8a4;margin-top:2px}
+.t2-mv.acc{color:#d4862a}
+.t2-sl{font-size:10px;color:#7a9a82;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.t2-entries{display:flex;flex-direction:column;gap:7px}
+.t2-e{background:#fff;border:0.5px solid #c8d5c8;border-radius:7px;padding:10px 12px;display:flex;gap:10px}
+.t2-ed{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.t2-et{font-size:12px;color:#2a3a2e;line-height:1.5;flex:1}
+.t2-em{display:flex;gap:6px;margin-top:5px}
+.t2-eb{font-size:10px;color:#2d5a3d;background:rgba(45,90,61,0.08);padding:2px 7px;border-radius:3px}
+.t2-ed2{font-size:10px;color:#a0b8a4}
+.t2-fab{position:absolute;bottom:16px;right:16px;background:#2d5a3d;color:#f4f7f4;border:none;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:500;cursor:pointer}
+
+.vote-row{display:flex;gap:8px;margin-top:10px}
+.vbtn{flex:1;padding:9px;border-radius:7px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:transparent}
+.vbtn:hover{background:var(--color-background-secondary)}
+</style>
+
+<div class="wrap">
+
+  <div>
+    <div class="tlabel">Option 1 — Warm Ivory + Deep Navy + Amber Gold (recommended)</div>
+    <div class="app t1">
+      <nav class="t1-sb">
+        <div class="t1-logo"><div class="t1-lm">Seen</div><div class="t1-ls">visibility engine</div></div>
+        <div class="t1-nav on"><span class="t1-dot"></span>Home</div>
+        <div class="t1-nav"><span class="t1-dot"></span>Log</div>
+        <div class="t1-nav"><span class="t1-dot"></span>Amplify</div>
+        <div class="t1-nav"><span class="t1-dot"></span>Settings</div>
+        <div class="t1-foot"><div style="display:flex;align-items:center;gap:8px"><div class="t1-av">LK</div><div><div class="t1-un">Leela K.</div><div class="t1-ur">Engineering Lead</div></div></div></div>
+      </nav>
+      <div class="t1-main">
+        <div class="t1-h1">Good morning, Leela</div>
+        <div class="t1-h2">Tuesday, Apr 1 · Next 1:1 in 3 days</div>
+        <div class="t1-mgrid">
+          <div class="t1-mc"><div class="t1-ml">Streak</div><div class="t1-mv acc">12</div><div class="t1-mh">days</div></div>
+          <div class="t1-mc"><div class="t1-ml">This week</div><div class="t1-mv">7</div><div class="t1-mh">entries</div></div>
+          <div class="t1-mc"><div class="t1-ml">Q2 total</div><div class="t1-mv">43</div><div class="t1-mh">since Apr 1</div></div>
+        </div>
+        <div class="t1-sl">Recent entries</div>
+        <div class="t1-entries">
+          <div class="t1-e"><div class="t1-ed" style="background:#c9924a"></div><div><div class="t1-et">Led cross-team sync on Rewards Platform migration — aligned 4 teams on cutover timeline</div><div class="t1-em"><span class="t1-eb">Execution & Delivery</span><span class="t1-ed2">Today</span></div></div></div>
+          <div class="t1-e"><div class="t1-ed" style="background:#7a6ab0"></div><div><div class="t1-et">Shoutout: Priya drove auth refactor solo, shipped 2 days early with zero incidents</div><div class="t1-em"><span class="t1-eb">People Impact</span><span class="t1-ed2">Yesterday</span></div></div></div>
+          <div class="t1-e"><div class="t1-ed" style="background:#4a8fa8"></div><div><div class="t1-et">Resolved alert noise blocking on-call rotation — documented runbook</div><div class="t1-em"><span class="t1-eb">Technical Scope</span><span class="t1-ed2">Mon</span></div></div></div>
+        </div>
+        <button class="t1-fab">+ Quick log</button>
+      </div>
+    </div>
+    <div class="vote-row">
+      <button class="vbtn" onclick="sendPrompt('I choose Theme 1 ivory navy amber for Seen. Generate the final plan.')">Use this theme</button>
+      <button class="vbtn" onclick="sendPrompt('Show me Theme 1 ivory navy but with a lighter sidebar')">Lighter sidebar</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="tlabel">Option 2 — Warm White + Forest Green + Amber</div>
+    <div class="app t2">
+      <nav class="t2-sb">
+        <div class="t2-logo"><div class="t2-lm">Seen</div><div class="t2-ls">visibility engine</div></div>
+        <div class="t2-nav on"><span class="t2-dot"></span>Home</div>
+        <div class="t2-nav"><span class="t2-dot"></span>Log</div>
+        <div class="t2-nav"><span class="t2-dot"></span>Amplify</div>
+        <div class="t2-nav"><span class="t2-dot"></span>Settings</div>
+        <div class="t2-foot"><div style="display:flex;align-items:center;gap:8px"><div class="t2-av">LK</div><div><div class="t2-un">Leela K.</div><div class="t2-ur">Engineering Lead</div></div></div></div>
+      </nav>
+      <div class="t2-main">
+        <div class="t2-h1">Good morning, Leela</div>
+        <div class="t2-h2">Tuesday, Apr 1 · Next 1:1 in 3 days</div>
+        <div class="t2-mgrid">
+          <div class="t2-mc"><div class="t2-ml">Streak</div><div class="t2-mv acc">12</div><div class="t2-mh">days</div></div>
+          <div class="t2-mc"><div class="t2-ml">This week</div><div class="t2-mv">7</div><div class="t2-mh">entries</div></div>
+          <div class="t2-mc"><div class="t2-ml">Q2 total</div><div class="t2-mv">43</div><div class="t2-mh">since Apr 1</div></div>
+        </div>
+        <div class="t2-sl">Recent entries</div>
+        <div class="t2-entries">
+          <div class="t2-e"><div class="t2-ed" style="background:#d4862a"></div><div><div class="t2-et">Led cross-team sync on Rewards Platform migration — aligned 4 teams on cutover timeline</div><div class="t2-em"><span class="t2-eb">Execution & Delivery</span><span class="t2-ed2">Today</span></div></div></div>
+          <div class="t2-e"><div class="t2-ed" style="background:#7a6ab0"></div><div><div class="t2-et">Shoutout: Priya drove auth refactor solo, shipped 2 days early with zero incidents</div><div class="t2-em"><span class="t2-eb">People Impact</span><span class="t2-ed2">Yesterday</span></div></div></div>
+          <div class="t2-e"><div class="t2-ed" style="background:#2d8a6a"></div><div><div class="t2-et">Resolved alert noise blocking on-call rotation — documented runbook</div><div class="t2-em"><span class="t2-eb">Technical Scope</span><span class="t2-ed2">Mon</span></div></div></div>
+        </div>
+        <button class="t2-fab">+ Quick log</button>
+      </div>
+    </div>
+    <div class="vote-row">
+      <button class="vbtn" onclick="sendPrompt('I choose Theme 2 forest green amber for Seen. Generate the final plan.')">Use this theme</button>
+      <button class="vbtn" onclick="sendPrompt('Show me Theme 2 but with a lighter green sidebar')">Lighter sidebar</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Plus+Jakarta+Sans:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ivory:        #f5f0e6;
+    --navy:         #1a2d5a;
+    --amber:        #c9924a;
+    --ink:          #2a2318;
+    --muted:        #8a7e6a;
+    --border:       #ddd5c3;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: #f5f0e6;
+    color: #2a2318;
+  }
+
+  /* Electron drag region — allow dragging from the title bar area */
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ddd5c3; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #c9924a40; }
+}
+
+@layer utilities {
+  .font-display { font-family: 'Fraunces', Georgia, serif; }
+  .font-body    { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+}
