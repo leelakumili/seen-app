@@ -49,6 +49,12 @@ See [INSTALL.md](INSTALL.md) for platform steps, the macOS Gatekeeper workaround
 
 Seen defaults to **Ollama**. Switch to Anthropic in **Settings → AI provider** — paste your API key directly in the app, no restart needed.
 
+**Ollama network access:** Ollama must be reachable over the network from the app. By default Ollama only binds to `127.0.0.1`, which works for local development. If you're running a packaged build or Ollama on a different host, start it with network access enabled:
+
+```bash
+OLLAMA_HOST=0.0.0.0 ollama serve
+```
+
 To use environment variables instead (for example, in CI or scripted setups):
 
 ```bash
