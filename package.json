@@ -99,7 +99,8 @@
     },
     "files": [
       "dist/**/*",
-      "dist-electron/**/*"
+      "dist-electron/**/*",
+      "db/**/*"
     ],
     "directories": {
       "buildResources": "build",

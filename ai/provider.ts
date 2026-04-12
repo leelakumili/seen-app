@@ -28,6 +28,32 @@ export function getProvider(db: Database.Database): AiProvider {
 // ── Ollama ─────────────────────────────────────────────────────────────────
 
 function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
+  async function ollamaFetch(url: string, body: object): Promise<Response> {
+    let res: Response
+    try {
+      res = await fetch(url, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(body),
+      })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      throw new Error(
+        `Cannot reach Ollama at ${baseUrl}. Make sure it is running (`+
+        `ollama serve`) and accessible over the network. (${msg})`
+      )
+    }
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      throw new Error(
+        `Ollama returned HTTP ${res.status}` +
+        (text ? `: ${text.slice(0, 200)}` : '') +
+        `. Check that model "${model}" is available (ollama pull ${model}).`
+      )
+    }
+    return res
+  }
+
   async function readStream(res: Response, onChunk: (c: string) => void) {
     const reader  = res.body?.getReader()
     if (!reader) return
@@ -47,29 +73,21 @@ function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
 
   return {
     async complete(prompt, opts = {}) {
-      const res  = await fetch(`${baseUrl}/api/generate`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ model, prompt, stream: false, options: { num_predict: opts.maxTokens ?? 1000 } }),
+      const res  = await ollamaFetch(`${baseUrl}/api/generate`, {
+        model, prompt, stream: false, options: { num_predict: opts.maxTokens ?? 1000 },
       })
       const data = await res.json() as { response?: string }
       return data.response ?? ''
     },
 
     async stream(prompt, onChunk) {
-      const res = await fetch(`${baseUrl}/api/generate`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ model, prompt, stream: true }),
-      })
+      const res = await ollamaFetch(`${baseUrl}/api/generate`, { model, prompt, stream: true })
       await readStream(res, onChunk)
     },
 
     async streamChat(system, messages, onChunk) {
-      const res = await fetch(`${baseUrl}/api/chat`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ model, stream: true, messages: [{ role: 'system', content: system }, ...messages] }),
+      const res = await ollamaFetch(`${baseUrl}/api/chat`, {
+        model, stream: true, messages: [{ role: 'system', content: system }, ...messages],
       })
       await readStream(res, onChunk)
     },

@@ -65,8 +65,13 @@ export function registerAiHandlers(ipc: IpcMain) {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   ipc.handle('ai:suggestBucket', async (_e, content: string) => {
-    const provider = getProvider(db)
-    const result   = await provider.complete(buildSuggestPrompt(content), { maxTokens: 80 })
+    let result: string
+    try {
+      const provider = getProvider(db)
+      result = await provider.complete(buildSuggestPrompt(content), { maxTokens: 80 })
+    } catch {
+      return { bucket: '', entry_type: '', impact_level: '' }
+    }
     try {
       const parsed = JSON.parse(result?.trim() ?? '{}')
       return {
@@ -113,7 +118,13 @@ export function registerAiHandlers(ipc: IpcMain) {
     const prompt    = buildBragMonthPrompt(entries as any[], monthLabel, params.year, getUserContext(), getBucketNames())
     let   fullText  = ''
 
-    await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    try {
+      await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error contacting AI provider.'
+      stream(win, `\n\n⚠️ ${msg}`)
+      return
+    }
 
     const now = new Date().toISOString()
     if (cached) {
@@ -140,7 +151,13 @@ export function registerAiHandlers(ipc: IpcMain) {
     const prompt   = buildBragDocPrompt(entries as any[], params.quarter, params.year, getUserContext(), getBucketNames())
     let   fullText = ''
 
-    await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    try {
+      await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error contacting AI provider.'
+      stream(win, `\n\n⚠️ ${msg}`)
+      return { id: '', output: '' }
+    }
 
     const existing = db.prepare(
       `SELECT id FROM generations WHERE type = 'brag_doc' AND quarter = ? AND year = ?`
@@ -172,7 +189,13 @@ export function registerAiHandlers(ipc: IpcMain) {
     const prompt   = buildQuarterlyPrompt(entries as any[], params.quarter, params.year, getUserContext())
     let   fullText = ''
 
-    await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    try {
+      await provider.stream(prompt, chunk => { fullText += chunk; stream(win, chunk) })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error contacting AI provider.'
+      stream(win, `\n\n⚠️ ${msg}`)
+      return { id: '', output: '' }
+    }
 
     const existing = db.prepare(
       `SELECT id FROM generations WHERE type = 'quarterly' AND quarter = ? AND year = ?`
@@ -190,8 +213,12 @@ export function registerAiHandlers(ipc: IpcMain) {
   })
 
   ipc.handle('ai:correctSpelling', async (_e, content: string) => {
-    const provider = getProvider(db)
-    return (await provider.complete(buildCorrectPrompt(content), { maxTokens: 500 })).trim()
+    try {
+      const provider = getProvider(db)
+      return (await provider.complete(buildCorrectPrompt(content), { maxTokens: 500 })).trim()
+    } catch {
+      return content
+    }
   })
 
   ipc.handle('ai:ask', async (e, params: { messages: ChatMessage[]; style?: AskResponseStyle }) => {
@@ -201,6 +228,11 @@ export function registerAiHandlers(ipc: IpcMain) {
     const entries  = db.prepare(`SELECT * FROM entries WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT 200`).all()
     const provider = getProvider(db)
 
-    await provider.streamChat(buildAskSystemPrompt(entries, params.style ?? 'normal', getUserContext()), params.messages, chunk => stream(win, chunk))
+    try {
+      await provider.streamChat(buildAskSystemPrompt(entries, params.style ?? 'normal', getUserContext()), params.messages, chunk => stream(win, chunk))
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error contacting AI provider.'
+      stream(win, `⚠️ ${msg}`)
+    }
   })
 }
