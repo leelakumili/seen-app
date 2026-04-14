@@ -14,11 +14,11 @@ export function getProvider(db: Database.Database): AiProvider {
   ).all() as { key: string; value: string }[]
   const s = Object.fromEntries(rows.map(r => [r.key, r.value]))
 
-  const provider   = s.ai_provider  ?? process.env.AI_PROVIDER  ?? 'ollama'
-  const model      = s.ai_model     ?? process.env.AI_MODEL     ?? 'llama3'
-  const ollamaHost = s.ollama_host  ?? process.env.OLLAMA_HOST  ?? 'http://localhost:11434'
+  const provider = s.ai_provider ?? process.env.AI_PROVIDER ?? 'ollama'
+  const model = s.ai_model ?? process.env.AI_MODEL ?? 'llama3'
+  const ollamaHost = s.ollama_host ?? process.env.OLLAMA_HOST ?? 'http://localhost:11434'
   // Settings take priority over env var so users can rotate keys without restarting the app
-  const apiKey     = s.anthropic_api_key || process.env.ANTHROPIC_API_KEY || ''
+  const apiKey = s.anthropic_api_key || process.env.ANTHROPIC_API_KEY || ''
 
   return provider === 'anthropic'
     ? buildAnthropicProvider(model, apiKey)
@@ -32,15 +32,14 @@ function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
     let res: Response
     try {
       res = await fetch(url, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(body),
+        body: JSON.stringify(body),
       })
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       throw new Error(
-        `Cannot reach Ollama at ${baseUrl}. Make sure it is running (`+
-        `ollama serve`) and accessible over the network. (${msg})`
+        `Cannot reach Ollama at ${baseUrl}. Make sure it is running (\`ollama serve\`) and accessible over the network. (${msg})`
       )
     }
     if (!res.ok) {
@@ -55,7 +54,7 @@ function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
   }
 
   async function readStream(res: Response, onChunk: (c: string) => void) {
-    const reader  = res.body?.getReader()
+    const reader = res.body?.getReader()
     if (!reader) return
     const decoder = new TextDecoder()
     while (true) {
@@ -63,7 +62,7 @@ function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
       if (done) break
       for (const line of decoder.decode(value).split('\n').filter(Boolean)) {
         try {
-          const obj  = JSON.parse(line) as { response?: string; message?: { content?: string } }
+          const obj = JSON.parse(line) as { response?: string; message?: { content?: string } }
           const text = obj.response ?? obj.message?.content
           if (text) onChunk(text)
         } catch { /* skip malformed chunk */ }
@@ -73,7 +72,7 @@ function buildOllamaProvider(model: string, baseUrl: string): AiProvider {
 
   return {
     async complete(prompt, opts = {}) {
-      const res  = await ollamaFetch(`${baseUrl}/api/generate`, {
+      const res = await ollamaFetch(`${baseUrl}/api/generate`, {
         model, prompt, stream: false, options: { num_predict: opts.maxTokens ?? 1000 },
       })
       const data = await res.json() as { response?: string }
@@ -104,7 +103,7 @@ function buildAnthropicProvider(model: string, apiKey: string): AiProvider {
       const msg = await client.messages.create({
         model,
         max_tokens: opts.maxTokens ?? 1000,
-        messages:   [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
       })
       const block = msg.content[0]
       return block?.type === 'text' ? block.text : ''
@@ -114,7 +113,7 @@ function buildAnthropicProvider(model: string, apiKey: string): AiProvider {
       const stream = await client.messages.stream({
         model,
         max_tokens: 2048,
-        messages:   [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
       })
       for await (const event of stream) {
         if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
