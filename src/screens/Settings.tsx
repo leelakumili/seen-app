@@ -392,7 +392,7 @@ export function Settings() {
             />
             <label className="text-xs text-muted block mb-1 mt-2">Model name</label>
             <input
-              value={local.ai_model ?? 'llama3'}
+              value={local.ai_model ?? 'mistral'}
               onChange={e => update('ai_model', e.target.value)}
               placeholder="llama3"
               className="w-full text-xs text-ink border border-border rounded px-2 py-1.5 focus:outline-none focus:border-amber bg-white"
