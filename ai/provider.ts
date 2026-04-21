@@ -15,7 +15,7 @@ export function getProvider(db: Database.Database): AiProvider {
   const s = Object.fromEntries(rows.map(r => [r.key, r.value]))
 
   const provider = s.ai_provider ?? process.env.AI_PROVIDER ?? 'ollama'
-  const model = s.ai_model ?? process.env.AI_MODEL ?? 'llama3'
+  const model = s.ai_model ?? process.env.AI_MODEL ?? 'mistral'
   const ollamaHost = s.ollama_host ?? process.env.OLLAMA_HOST ?? 'http://localhost:11434'
   // Settings take priority over env var so users can rotate keys without restarting the app
   const apiKey = s.anthropic_api_key || process.env.ANTHROPIC_API_KEY || ''
