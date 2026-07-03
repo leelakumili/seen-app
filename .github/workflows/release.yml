@@ -67,6 +67,27 @@ jobs:
           # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: npm run build
 
+      - name: Verify macOS binary is universal (arm64 + x86_64)
+        if: matrix.os == 'macos-latest'
+        run: |
+          APP=$(find release -maxdepth 3 -name 'Seen.app' | head -1)
+          if [ -z "$APP" ]; then echo "::error::Seen.app not found under release/"; exit 1; fi
+          EXEC=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Contents/Info.plist")
+          BIN="$APP/Contents/MacOS/$EXEC"
+          echo "Architectures in $BIN:"
+          lipo -archs "$BIN"
+          for arch in arm64 x86_64; do
+            lipo -archs "$BIN" | grep -qw "$arch" || { echo "::error::missing $arch slice — binary is not universal"; exit 1; }
+          done
+          SQLITE=$(find "$APP" -name 'better_sqlite3.node' | head -1)
+          if [ -n "$SQLITE" ]; then
+            echo "Architectures in $SQLITE:"
+            lipo -archs "$SQLITE"
+            for arch in arm64 x86_64; do
+              lipo -archs "$SQLITE" | grep -qw "$arch" || { echo "::error::better_sqlite3.node missing $arch slice"; exit 1; }
+            done
+          fi
+
       - name: Upload release artifacts
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
